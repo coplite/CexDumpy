@@ -52,7 +52,7 @@ int main(int argc, char** argv){
         return -1;
     }
     uint64_t size = ftell(filePointer);
-    if(size < 0){
+    if(size == (uint64_t)-1){
         fclose(filePointer);
         perror("[-] Failed to retrieve file size\n");
         return -1;
