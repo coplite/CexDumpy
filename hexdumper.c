@@ -1,27 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// gcc hexdumper.c -Wall -Werror -pedantic -O2 -flto && ./a.out bench.cpp
+// gcc hexdumper.c -Wall -Werror -pedantic -O2 -flto
 void HexDump(char* filename, unsigned char* data, uint64_t size){
-    const char hexNumbers[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     char spacedHex[192+1] = {0};
     char joinedHex[160+1] = {0};
     short offset = 0;
     for(short i = 0; i < 8; ++i){
-        offset += sprintf(spacedHex+offset,"\x1B[%dm0%c\x1B[0m ", 30+i, hexNumbers[i]);
+        offset += sprintf(spacedHex+offset,"\x1B[%dm0%x\x1B[0m ", 30+i, i);
     }
     spacedHex[offset] = ' ';
     offset += 1;
     for(short i = 0; i < 8; ++i){
-        offset += sprintf(spacedHex+offset,"\x1B[%dm0%c\x1B[0m ", 90+i, hexNumbers[i+8]);
+        offset += sprintf(spacedHex+offset,"\x1B[%dm0%x\x1B[0m ", 90+i, i+8);
     }
     spacedHex[192] = '\0';
     offset = 0;
     for(short i = 0; i < 8; ++i){
-        offset += sprintf(joinedHex+offset,"\x1B[%dm%c\x1B[0m", 30+i, hexNumbers[i]);
+        offset += sprintf(joinedHex+offset,"\x1B[%dm%x\x1B[0m", 30+i, i);
     }
     for(short i = 0; i < 8; ++i){
-        offset += sprintf(joinedHex+offset,"\x1B[%dm%c\x1B[0m", 90+i, hexNumbers[i+8]);
+        offset += sprintf(joinedHex+offset,"\x1B[%dm%x\x1B[0m", 90+i, i+8);
     }
     printf("┌──────────┬──────────────────────────────────────────────────┬──────────────────┐\n│  \x1B[94moffset\x1B[0m  │ %s │ %s │\n├──────────┼──────────────────────────────────────────────────┼──────────────────┤\n", spacedHex, joinedHex);
     unsigned char buffer[16+1] = {0};
